@@ -1,0 +1,28 @@
+img{
+    width:40%;
+    margin:5% 0% 5% 4%;
+    height: 100%;
+
+}
+.img-thread{
+    width:30%;
+}
+.tbl-row{
+    text-align: center;
+}
+.card-hover:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.card-hover .card-body {
+    transition: all .3s ease-out;
+}
+
+.card-hover .card-title {
+    color: #ffffff;
+}
+
+.card {
+    border-radius: 0;
+}
