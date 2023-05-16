@@ -29,4 +29,7 @@ Route::post('/cars/{id}', [CarController::class, 'update']);
 Route::get('/cars/edit/{id}', [CarController::class, 'edit']);
 Route::delete('/delete{id}', [CarController::class, 'destroy']);
 Route::post('/rentals/create', [RentController::class, 'store']);
+Route::get('/carinfo/{id}', [RentController::class, 'carinfo']);
+Route::get('/userinfo', [RentController::class, 'userinfo']);
+Route::delete('/rentend/{id}', [RentController::class, 'rentend']);
 

@@ -1,4 +1,4 @@
-img{
+.imageprop{
     width:40%;
     margin:5% 0% 5% 4%;
     height: 100%;
@@ -7,22 +7,27 @@ img{
 .img-thread{
     width:30%;
 }
+.tbl1{
+
+    overflow-x: auto;
+}
 .tbl-row{
     text-align: center;
 }
-.card-hover:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
+.editbtn{
+    width:65%;
+   padding: 5px;
 
-.card-hover .card-body {
-    transition: all .3s ease-out;
 }
+@media (max-width: 576px) {
+    .imageprop{
+        width: 100%;
+        margin: 5% 0;
+    }
 
-.card-hover .card-title {
-    color: #ffffff;
-}
+    .img-thread {
+        width: 100%;
+    }
 
-.card {
-    border-radius: 0;
+
 }

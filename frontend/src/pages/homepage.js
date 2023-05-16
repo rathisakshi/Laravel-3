@@ -1,7 +1,8 @@
 import React, {useEffect} from 'react';
 import {Navbar, Nav, NavDropdown, Container} from 'react-bootstrap';
 import { Carousel } from 'react-bootstrap';
-import './adminDashboard/dashboard.css';
+import './include/homepage.css';
+
 import {useNavigate} from "react-router-dom";
 
 function Homepage() {
@@ -27,7 +28,9 @@ function Homepage() {
                         <Nav className="me-auto">
                             <Nav.Link href="/home">Home</Nav.Link>
                             <Nav.Link href="/carlist">Rent a Car</Nav.Link>
+                            <Nav.Link href="/carinfo">Your Rented Cars</Nav.Link>
                             <Nav.Link href="/logout">Logout</Nav.Link>
+
                         </Nav>
                     </Container>
                 </Navbar>
@@ -89,7 +92,7 @@ function Homepage() {
             <div className="text-center mt-5">
                 <h2>Ready to rent a car?</h2>
                 <p className="lead">Choose from our wide selection of vehicles and book your rental today.</p>
-                <a className="btn btn-primary btn-lg" href="/rental">Rent a Car</a>
+                <a className="btn btn-primary btn-lg" href="/carlist">Rent a Car</a>
             </div>
             <footer className="bg-dark text-white py-4 mt-5">
                 <div className="container">

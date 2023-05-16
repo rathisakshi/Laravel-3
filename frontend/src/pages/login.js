@@ -7,10 +7,24 @@ import Header from './header';
 
 
 function Login() {
+    useEffect(() => {
+
+
+        if (!JSON.parse(localStorage.getItem('user-info'))) {
+            const user = JSON.parse(localStorage.getItem('user-info'));
+
+        } else {
+            navigate('/logout');
+        }
+
+
+    }, []);
+
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate(); //navigation
+
 
     const loginData = async (event) => {
         event.preventDefault();
@@ -21,20 +35,24 @@ function Login() {
                 method: 'POST', headers: {
                     "Content-Type": "application/json", "Accept": "application/json"
                 }, body: JSON.stringify(item)
-            });
+            })
+                .catch(error => console.error(error));
             // console.log(result);
             result = await result.json();
             console.warn("result", result);
             // Check if user is admin
             if(result.name) {
+                localStorage.setItem("user-info", JSON.stringify(result));
 
                 if (result.isAdmin) {
                     navigate('/dashboard'); // Redirect to dashboard page
                 } else {
-                    navigate('/carlist'); // Redirect to car listings page
+                    navigate('/home'); // Redirect to car listings page
                 }
             }
-            localStorage.setItem("user-info", JSON.stringify(result));
+            if(result.error){
+                alert("Invalid Credentials")
+            }
 
         }
     }
@@ -47,13 +65,13 @@ function Login() {
                     <Form.Group className="mb-3" controlId="formBasicEmail">
                         <Form.Label>Email address</Form.Label>
                         <Form.Control name="email" type="email" placeholder="Enter email" value={email}
-                                      onChange={(e) => setEmail(e.target.value)}/>
+                                      onChange={(e) => setEmail(e.target.value)} required/>
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicPassword">
                         <Form.Label>Password</Form.Label>
                         <Form.Control name="password" type="password" placeholder="Password" value={password}
-                                      onChange={(e) => setPassword(e.target.value)}/>
+                                      onChange={(e) => setPassword(e.target.value)} required/>
                     </Form.Group>
 
                     <Button type={"submit"} variant="primary">

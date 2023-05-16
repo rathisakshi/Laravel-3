@@ -1,14 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import {Container, Nav, Navbar} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
-import './products.css';
 
 // import 'bootstrap/dist/css/bootstrap.min.css';
 // import 'assets/css/ui.css';
 // import 'assets/css/responsive.css';
 // import 'assets/css/all.min.css';
 // import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-function ProductList() {
+function CarInfo() {
     const [cars, setCars] = useState([]);
     const navigate = useNavigate(); //navigation
 
@@ -22,16 +21,23 @@ function ProductList() {
         } else {
             navigate('/logout');
         }
-
-        fetch('http://localhost:8000/api/cars')
+       const user = JSON.parse(localStorage.getItem('user-info'))
+        fetch(`http://localhost:8000/api/carinfo/${user.id}`)
             .then(response => response.json())
             .then(data => setCars(data))
             .catch(error => console.error(error));
     }, []);
-    const handleSubmit = (id, price) => {
-        localStorage.setItem("price", JSON.stringify(price));
-        window.location.href = `/rental/${id}`;
-    };
+    const handleSubmit = async (id) => {
+        const confirmed = window.confirm('Do you want to end this rent?,We are sorry to let you go');
+        if (confirmed) {
+            let result =await fetch(`http://localhost:8000/api/rentend/${id}`, {
+                method: 'DELETE',
+            })  .catch(error => console.error(error));
+            result = await result.json();
+            console.warn("result", result.success);
+            // window.location.href = '/listing';
+        }
+    }
 
 
     return (
@@ -39,11 +45,10 @@ function ProductList() {
             <div>
                 <Navbar bg="dark" variant="dark">
                     <Container>
-                        <Navbar.Brand href="#home">Car Me Now</Navbar.Brand>
+                        <Navbar.Brand href="/home">Car Me Now</Navbar.Brand>
                         <Nav className="me-auto">
                             <Nav.Link href="/home">Home</Nav.Link>
                             <Nav.Link href="/carlist">Rent a Car</Nav.Link>
-                            <Nav.Link href="/carinfo">Your Rented Cars</Nav.Link>
                             <Nav.Link href="/logout">Logout</Nav.Link>
                         </Nav>
                     </Container>
@@ -83,8 +88,8 @@ function ProductList() {
                                                         </div>
 
                                                     </div>
-                                                    <a href="#" onClick={() => handleSubmit(car.id, car.price_per_day)}
-                                                       class="btn btn-block btn-success">Rent Now</a>
+                                                    <a href="/home" onClick={() => handleSubmit(car.id)}
+                                                       class="btn btn-block btn-success">End Rent</a>
                                                 </figcaption>
 
                                             </figure>
@@ -135,10 +140,11 @@ function ProductList() {
                     </div>
                 </footer>
 
+
             </div>
         </div>
     );
 }
 
 
-export default ProductList;
+export default CarInfo;

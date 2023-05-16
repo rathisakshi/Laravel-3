@@ -1,0 +1,14 @@
+@media (max-width: 768px) {
+    .list-unstyled li {
+        display: inline-block;
+        margin-right: 10px;
+    }
+    .col-md-4 {
+        margin-bottom: 20px;
+    }
+}
+@media (max-width: 576px) {
+    .col-md-4 {
+        text-align: center;
+    }
+}

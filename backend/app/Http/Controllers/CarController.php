@@ -5,21 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Car;
+use Illuminate\Support\Facades\Validator;
 
 class CarController extends Controller
 {
 
     public function index()
     {
-        //
-        $cars = Car::all();
-        return response()->json($cars);
+
+        $rental = Car::where('availability', true)->get();
+        return response()->json($rental);
     }
 
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $validator = Validator::make($request->all(),[
             'brand_name' => 'required|string',
             'model' => 'required|string',
             'price_per_day' => 'required|numeric|min:1',
@@ -27,6 +28,9 @@ class CarController extends Controller
             'gearbox' => 'required|string',
             'availability' => 'nullable|boolean'
         ]);
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+        }
         $car = new Car;
 //        $car->photo = $request->file('photo')->store('photo');
         $car->brand_name = $request->input('brand_name');
@@ -57,7 +61,7 @@ class CarController extends Controller
     {
         $car = Car::findOrFail($id);//throws an exception if the car is not found
 
-        $validatedData = $request->validate([
+        $validator = validator($request->all(),[
             'brand_name' => 'required|string',
             'model' => 'required|string',
             'price_per_day' => 'required|numeric|min:1',
@@ -65,26 +69,30 @@ class CarController extends Controller
             'gearbox' => 'required|string',
             'availability' => 'nullable|boolean'
         ]);
+        if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
+    } else {
 
-        $car->brand_name = $validatedData['brand_name'];
-        $car->model = $validatedData['model'];
-        $car->price_per_day = $validatedData['price_per_day'];
-        $car->fuel_type = $validatedData['fuel_type'];
-        $car->gearbox = $validatedData['gearbox'];
-        $car->availability = $request->has('availability');
+            $car->brand_name = $request->input('brand_name');
+            $car->model = $request->input('model');
+            $car->price_per_day = $request->input('price_per_day');
+            $car->fuel_type = $request->input('fuel_type');
+            $car->gearbox = $request->input('gearbox');
+            $car->availability = $request->input('availability', false);
 
-        if ($request->hasFile('photo')) {
-            $filename = $request->file('photo')->getClientOriginalName();
-            $request->file('photo')->storeAs('public/photos', $filename);
-            $car->photo = $filename;
+            if ($request->hasFile('photo')) {
+                $filename = $request->file('photo')->getClientOriginalName();
+                $request->file('photo')->storeAs('public/photos', $filename);
+                $car->photo = $filename;
+            }
+
+            $car->update();
+
+            return response()->json([
+                'message' => 'Car updated successfully',
+                'data' => $car
+            ]);
         }
-
-        $car->update();
-
-        return response()->json([
-            'message' => 'Car updated successfully',
-            'data' => $car
-        ]);
     }
 
     public function edit(Car $id)
